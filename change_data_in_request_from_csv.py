@@ -55,9 +55,10 @@ for file in folder:
         for policy in policy_list:
             partner_list = policy['partnerList']
             for partner in partner_list:
-                partner['businessPartner']['personData']['firstName'] = first_name
-                partner['businessPartner']['personData']['lastName'] = last_name
-                partner['businessPartner']['personData']['pesel'] = pesel
+                if partner['businessPartner']['partnerType'] not in ('COMPANY', 'O'):
+                    partner['businessPartner']['personData']['firstName'] = first_name
+                    partner['businessPartner']['personData']['lastName'] = last_name
+                    partner['businessPartner']['personData']['pesel'] = pesel
 
             vehicle_list = policy['objectList']
             for vehicle in vehicle_list:
