@@ -10,7 +10,7 @@ import traceback
 # --umowę generalną, partnerList mają wyłącznie osoby lub jdg
 # --warunek na response: premiumchangeallowed na ryzyku OC musi być na true i na tym samym ryzyku calculationAlgorithm musi być NONE
 
-folder_res = glob.glob('data/tariff_response/*', recursive=True)
+folder_res = glob.glob('data/tariff_request/*', recursive=True)
 
 
 def load_json_file(filename):
@@ -28,12 +28,10 @@ for res in folder_res:
     policy = response['root']['applicationList'][0]['policyList']
 
     for pol in policy:
-        if pol['generalAgreementNumber'] == 'EBMW_FS':
-            type_list = [partner['businessPartner']['partnerType'] for partner in pol['partnerList']]
-            if 'COMPANY' in type_list:
-                break
-
-            for risk in pol['riskList']:
-                if risk['productData']['symbol'] == 'OC':
-                    if risk['isPremiumChangeAllowed'] and risk['calculationAlgorithm'] == 'NONE':
+        for partner in pol['partnerList']:
+            try:
+                for doc in partner['businessPartner']['personData']['identityDocumentList']:
+                    if not 'documentNumber' in doc.keys():
                         print(os.path.basename(res))
+            except:
+                pass

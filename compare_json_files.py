@@ -19,13 +19,18 @@ def compare(differents_dict, file1, file2):
             if key1 == key2:
                 if type(value1) == dict:
                     compare(differents_dict, value1, value2)
+
                 elif type(value1) == list:
                     for el in range(0, len(value1)):
                         differents_dict[f"{key1}_{el}"] = {}
                         compare(differents_dict[f"{key1}_{el}"], value1[el], value2[el])
+
+                        if not differents_dict[f"{key1}_{el}"]:
+                            del differents_dict[f"{key1}_{el}"]
+
                 else:
                     if value1 != value2:
-                        differents_dict[key1] = (value1, value2)
+                        differents_dict[key1] = {"file1": value1, "file2": value2}
     return differents_dict
 
 
